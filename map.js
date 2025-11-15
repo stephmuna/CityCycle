@@ -76,6 +76,10 @@ function filterTripsByTime(trips, timeFilter) {
       });
 }
 
+const stationFlow = d3.scaleQuantize()
+  .domain([0, 1])
+  .range([0, 0.5, 1]);
+
 map.on('load', async () => {
     // -----------------------------
     // Boston Bike Lanes
@@ -154,9 +158,7 @@ map.on('load', async () => {
   
       console.log('Stations with traffic:', stations);
   
-      // -----------------------------
-      // Circles – keyed by short_name
-      // -----------------------------
+      
       circles = svg
         .selectAll('circle')
         .data(stations, (d) => d.short_name)
@@ -167,6 +169,10 @@ map.on('load', async () => {
         .attr('stroke', 'white')
         .attr('stroke-width', 1)
         .attr('opacity', 0.8)
+        .style('--departure-ratio', d =>
+            stationFlow(d.departures / d.totalTraffic || 0)
+          )
+        .style('fill', 'var(--color)')
         .style('pointer-events', 'auto')
         .each(function (d) {
           d3.select(this)
@@ -176,9 +182,7 @@ map.on('load', async () => {
             );
         });
   
-      // -----------------------------
-      // Position circles on the map
-      // -----------------------------
+      
       function updatePositions() {
         circles
           .attr('cx', (d) => getCoords(d).cx)
@@ -222,7 +226,9 @@ map.on('load', async () => {
         circles = circles
           .data(filteredStations, (d) => d.short_name)
           .join('circle')
-          .attr('r', (d) => radiusScale(d.totalTraffic));
+          .attr('r', (d) => radiusScale(d.totalTraffic))
+          .style('--departure-ratio', d =>
+            stationFlow(d.departures / d.totalTraffic || 0));
   
         // re-attach tooltips in case join ever recreates any circles
         circles.each(function (d) {

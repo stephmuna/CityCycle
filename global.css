@@ -16,15 +16,15 @@ body {
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
 }
 
 #map {
-  width: 100%; /* Adjust width to your desired size */
-  height: 100%; /* Adjust height to your desired size */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for effect */
-  border-radius: 8px; /* Optional: rounded corners */
+  width: 100%; 
+  height: 100%; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px; 
 }
 
 #map svg {
@@ -37,7 +37,7 @@ body {
   }
 
 #map svg circle {
-    fill: steelblue;
+    fill: var(--color);
     fill-opacity: 0.8;
     stroke: white;
     stroke-width: 1px;
@@ -45,7 +45,7 @@ body {
 
   }
 
-/* Put the title on the far left and the label on the far right */
+
 #controls {
     display: flex;
     justify-content: space-between;
@@ -53,21 +53,21 @@ body {
     width: 100%;
   }
   
-  /* The label on the right – NO flex here */
+  
   #time-filter {
-    text-align: right;      /* right-align its contents */
+    text-align: right;      
     font-size: 0.95rem;
   }
   
-  /* Make "Filter by time:" and the slider share one line */
+  
   #time-slider {
-    width: 300px;           /* long slider */
-    margin-left: 0.5rem;    /* little gap after "Filter by time:" */
-    vertical-align: middle; /* aligns knob with the text */
-    display: inline-block;  /* keeps it on the same line as the text */
+    width: 300px;           
+    margin-left: 0.5rem;    
+    vertical-align: middle; 
+    display: inline-block;  
   }
   
-  /* Put (any time) and the time on their own lines under the slider */
+  
   #any-time,
   #time-display {
     display: block;
@@ -77,6 +77,44 @@ body {
     color: #888;
     font-style: italic;
   }
+
+  circle {
+    --color-departures: steelblue;
+    --color-arrivals: darkorange;
+    --color: color-mix(
+      in oklch,
+      var(--color-departures) calc(100% * var(--departure-ratio)),
+      var(--color-arrivals)
+    );
+    fill: var(--color);
+  }
+
+  #map svg circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+}
+
+.legend {
+    display: flex;
+    width: 100%;  
+    gap: 1px;               
+    margin-block: 1rem;     
+    font-size: 0.9rem;
+  }
   
+  
+  .legend > div {
+    flex: 1;                
+    padding: 0.35rem 0.75rem;
+    color: white;           
+    text-align: center;
+    background-color: var(--color);
+  }
   
  
